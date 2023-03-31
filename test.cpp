@@ -1,30 +1,53 @@
 #include <iostream>
 #include <chrono>
-#define BENCHMARK_N 50000
+#define BENCHMARK_N 500
 #include "myList.hpp"
 
 int main(){
 
     gamingList::list<int> a;
     
-    for(int i = 0; i< 100;i++){
+    //insert item in order and insure they are in order.
+    for(int i =0; i < BENCHMARK_N; i++){
         a.append(i);
-
     }
-
-    /*
-    for(int i = 0; i<a.len(); i++){
-        std::cout << a.get(i) << std::endl;
+    bool pass = true;
+    for(int i =0; i< a.len();i++){
+        if(i != a.get(i)){
+            pass = false;
+        }
     }
+    std::cout << "appending in order: " << pass << std::endl;
 
-    std::cout << a.get(60) << std::endl;
-    */
 
-    a.insert(99999,50);
-    a.insert(99999,0);
-    //a.insert(99999,a.len());
-    for(int i = 0; i<a.len(); i++){
-        std::cout << a.get(i) << std::endl;
+    pass = true;
+    //remove item 0, last item, and item size/2.
+    int removed[] = {-1,-1,-1};
+    removed[0] = a.get(0);
+    a.remove(0);
+    removed[1] = a.get(a.len()-1);
+    a.remove(a.len()-1);
+    removed[2] = a.get(a.len()/2);
+    a.remove(a.len()/2);
+
+    for(int i =0; i< a.len();i++){
+        for(int j = 0; j< 3;j++){
+            if(a.get(i) == removed[j]){
+                pass = false;
+            }
+        }
     }
+    
+
+    
+    std::cout << "removing: " << pass << std::endl;
+
+    pass = true;
+    a.insert(10,50);
+    if(a.get(50) != 10){
+        pass = false;
+    }
+    
+    std::cout << "insert: " << pass << std::endl;
 
 }

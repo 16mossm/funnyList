@@ -26,6 +26,7 @@ namespace gamingList{
         int total = 0;
         node<T>* tail;
         
+        //for performance
         node<T>* cach;
         int cachPos = -1;
 
@@ -35,40 +36,46 @@ namespace gamingList{
         }
 
         node<T>* GetNodeAtIndex(int index){
-            if(index == 0){return this->head;}
-            if(index == this->total - 1){return this->tail;}
+            //edge cases == speed
+            if(index == 0){return this->head;}  
+            if(index == this->total - 1){return this->tail;}    
+            //ensure the cach is not reset
             if(cachPos < 0){cachPos = 0;cach = head;}
 
+            //direction of loop
             bool Forward;
+            //index being used while looping
             int i;
+            //current pointer being used while looping
             node<T>* current;
             
+            //finds weather it would be faster to start at the head,tail or cach
             if(distance(0,index) < distance(cachPos,index)
             ||distance(this->len(),index) < distance(cachPos,index)
             ){
-                if(index < (this->len() / 2)){
+                if(index < (this->len() / 2)){//starting at head
 
                     current = head;
                     i = 0;
                     Forward = true;
                 }
 
-                else{
+                else{//starting at tail
                     current = tail;
                     i = this->len();
                     Forward = false; 
 
                 }
             } 
-            else{
+            else{//starting at cach
                 current = cach;
                 i = cachPos;
                 Forward = (index - cachPos > 0);
             }
-            
+
+            //start the loop
             do{
-                if(i == index){break;}
-                
+                if(i == index){break;}//found the item
                 if(Forward){
                     current = current->next;
                     i++;
@@ -77,9 +84,9 @@ namespace gamingList{
                     current = current->prev;
                     i--; 
                 }
-            }while(current!=tail && current != head);
+            }while(current!=tail && current != head);//if its looking for an item outsied of range it will return the closest
 
-            cachPos = index;
+            cachPos = index;    //edit the cach
             cach = current;
             return current;
 

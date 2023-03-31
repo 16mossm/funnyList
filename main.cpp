@@ -3,7 +3,7 @@
 #include "myList.hpp"
 
 
-#define BENCHMARK_N 50000
+#define BENCHMARK_N 500000
 
 int main(){
     gamingList::list<int> lst;
