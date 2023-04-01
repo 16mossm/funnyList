@@ -35,6 +35,7 @@ namespace gamingList{
 
         }
 
+
         node<T>* GetNodeAtIndex(int index){
             //edge cases == speed
             if(index == 0){return this->head;}  
@@ -51,9 +52,9 @@ namespace gamingList{
             
             //finds weather it would be faster to start at the head,tail or cach
             if(distance(0,index) < distance(cachPos,index)
-            ||distance(this->len(),index) < distance(cachPos,index)
+            ||distance(total - 1,index) < distance(cachPos,index)
             ){
-                if(index < (this->len() / 2)){//starting at head
+                if(index < (this->total/ 2)){//starting at head
 
                     current = head;
                     i = 0;
@@ -79,7 +80,7 @@ namespace gamingList{
                 if(Forward){
                     current = current->next;
                     i++;
-                    }
+                }
                 else{
                     current = current->prev;
                     i--; 
@@ -119,7 +120,8 @@ namespace gamingList{
 
 
         T get(int index){
-            return GetNodeAtIndex(index)->data;
+            node<int>* temporary =  GetNodeAtIndex(index);
+            return temporary->data;
         }
 
         
@@ -159,40 +161,61 @@ namespace gamingList{
             while(remove(0));
         }
 
-
+    //yep
         void prepend(T newdata){
             this->insert(newdata,0);
         }
 
+        void push_front(T newdata){
+            this->prepend(newdata);
+        }
+
+
+
+        
+
+
         void insert(T newData,int index){
             node<T>* current = GetNodeAtIndex(index);
+            std::cout << "hovgsoihgj;hgsdhiog: " << current->data <<std::endl;
+            if(current == this->tail){
+                this->append(newData);
+                resetCach();
+                return;
+            }
+
             node<T>* adding = new node<T>;
             adding->data = newData;
+
             if(current == this->head){
                 current->prev = adding;
                 adding->next = current;
                 this->head = adding;                
 
-
                 this->total++;
+                
                 resetCach();
                 return;
             }
-
-            if(current == this->tail){
-                this->append(newData);
-                return;
-            }
-
             
-            current->prev->next = adding;
             adding->prev = current->prev;
-            adding->next = current;
-            current->prev = adding;
+            adding->next  = current;
 
+            current->prev->next = adding;
+            current->prev = adding;
+            
             this->total++;
             resetCach();
         }
+
+
+        void pop_front(){
+            this->remove(0);
+        }
+        void pop_back(){
+            this->remove(this->total-1);
+        }
+
 
     };
 };
