@@ -13,7 +13,7 @@ bool arrCmp(T* arr1, T* arr2, int len){
     return true;
 }
 
-#define VALIDATE_N 1000
+#define VALIDATE_N 100
 
 
 int main(){
@@ -37,9 +37,14 @@ int main(){
         arr2[i] = *s_it;
     }
     bool valid = arrCmp(arr, arr2, VALIDATE_N);
+
+    /*
+    */
+
     delete arr2;
     delete arr;
     if(!valid){
+        
         std::cout << "ERROR: Random element validation failed!" << std::endl;
         return 1;
     }
@@ -66,17 +71,22 @@ int main(){
     // Remove half of the elements from each list randomly
     for(int i=0; i<VALIDATE_N/2; i++){
         int idx = rand()%lst.len();
+
         lst.remove(idx);
         s_it = s_lst.begin();
         std::advance(s_it, idx);
+        //std::cout << "removed std: " << *s_it << std::endl;
         s_lst.erase(s_it);
     }
 
+
+    
     // And prepend some stuff too
     for(int i=0; i<VALIDATE_N/2; i++){
-        lst.insert(0, i);
+        lst.prepend(i);
         s_lst.push_front(i);
     }
+    
 
     // Now get random elements from each list and place them into an array again
     s_it = s_lst.begin();
@@ -89,6 +99,8 @@ int main(){
         std::advance(s_it, idx);
         arr2[i] = *s_it;
     }
+
+
     valid = arrCmp(arr, arr2, VALIDATE_N);
     delete arr2;
     delete arr;

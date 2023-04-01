@@ -62,7 +62,7 @@ namespace gamingList{
 
                 else{//starting at tail
                     current = tail;
-                    i = this->len();
+                    i = this->len() - 1;
                     Forward = false; 
 
                 }
@@ -127,12 +127,12 @@ namespace gamingList{
         bool remove(int index){
             if(index < 0 || index >= this->total){return false;}
             node<T>* current = GetNodeAtIndex(index); 
-            resetCach();
+            
             if(current == head){
                 this->head = current->next;
                 delete(current);
                 total--;
-                return true; 
+                return true;
             }
             if(current == tail){
                 this->tail = current->prev;
@@ -141,9 +141,16 @@ namespace gamingList{
                 return true;
             }
 
-            current->prev->next = current->next;
-            current->next->prev = current->prev;
-            total--;
+            node<int>* previous = GetNodeAtIndex(index - 1); 
+            node<int>* after = GetNodeAtIndex(index + 1); 
+
+            previous->next = after;
+            after->prev = previous;
+            
+
+
+            resetCach();
+            this->total--;
             delete(current);
             return true;
         }
@@ -153,23 +160,36 @@ namespace gamingList{
         }
 
 
+        void prepend(T newdata){
+            this->insert(newdata,0);
+        }
+
         void insert(T newData,int index){
             node<T>* current = GetNodeAtIndex(index);
             node<T>* adding = new node<T>;
             adding->data = newData;
-            
-            if(current == head){
-                head = adding;
-                adding->next = current;
+            if(current == this->head){
                 current->prev = adding;
+                adding->next = current;
+                this->head = adding;                
+
+
+                this->total++;
                 resetCach();
                 return;
             }
+
+            if(current == this->tail){
+                this->append(newData);
+                return;
+            }
+
             
-            adding->next = current;
+            current->prev->next = adding;
             adding->prev = current->prev;
-            adding->prev->next = adding;
+            adding->next = current;
             current->prev = adding;
+
             this->total++;
             resetCach();
         }
