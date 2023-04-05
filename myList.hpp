@@ -156,21 +156,6 @@ namespace gamingList{
             return true;
         }
 
-        ~list(){
-            while(remove(0));
-        }
-
-    //yep
-        void prepend(T newdata){
-            this->insert(newdata,0);
-        }
-
-        void push_front(T newdata){
-            this->prepend(newdata);
-        }
-
-
-
         void insert(T newData,int index){
             if(index == this->total){
                 this->append(newData);
@@ -210,6 +195,17 @@ namespace gamingList{
             this->remove(this->total-1);
         }
 
+        void prepend(T newdata){
+            this->insert(newdata,0);
+        }
+
+        void push_front(T newdata){
+            this->prepend(newdata);
+        }
+
+        ~list(){
+            while(remove(0));
+        }
 
     };
 };
