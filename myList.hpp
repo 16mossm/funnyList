@@ -51,6 +51,7 @@ namespace gamingList{
             node<T>* current;
             
             //finds weather it would be faster to start at the head,tail or cach
+            
             if(distance(0,index) < distance(cachPos,index)
             ||distance(total - 1,index) < distance(cachPos,index)
             ){
@@ -73,6 +74,7 @@ namespace gamingList{
                 i = cachPos;
                 Forward = (index - cachPos > 0);
             }
+
 
             //start the loop
             do{
@@ -102,6 +104,7 @@ namespace gamingList{
         }
 
         void append(T newdata){
+            resetCach();
             if(total == 0){
                 this->head = new node<T>;
                 this->head->data = newdata;
@@ -130,6 +133,7 @@ namespace gamingList{
             if(index < 0 || index >= this->total){return false;}
             node<T>* current = GetNodeAtIndex(index); 
             
+
             if(current == head){
                 this->head = current->next;
                 delete(current);
@@ -172,18 +176,13 @@ namespace gamingList{
 
 
 
-        
-
-
         void insert(T newData,int index){
-            node<T>* current = GetNodeAtIndex(index);
-            std::cout << "hovgsoihgj;hgsdhiog: " << current->data <<std::endl;
-            if(current == this->tail){
+            if(index == this->total){
                 this->append(newData);
-                resetCach();
                 return;
             }
 
+            node<T>* current = GetNodeAtIndex(index);
             node<T>* adding = new node<T>;
             adding->data = newData;
 

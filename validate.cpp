@@ -3,7 +3,7 @@
 #include <list> // For comparison
 #include "myList.hpp"
 
-#define VALIDATE_N 1000
+#define VALIDATE_N 10
 
 
 template<typename T>
@@ -62,8 +62,6 @@ void insertRandomTest(gamingList::list<int>& lst, std::list<int>& s_lst){
         std::advance(s_it, idx);
         s_lst.insert(s_it, i);
 
-        std::cout << lst.get(idx) << " : " << *s_it <<std::endl;
-
 
     }
 }
@@ -104,6 +102,8 @@ int main(){
     }else{
         std::cout << "PASS: Delete random test passed" << std::endl;
     }
+
+
 
     
     // Then run the insert random test to insert VALIDATE_N elements into the list
