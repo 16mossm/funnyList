@@ -1,9 +1,5 @@
 namespace gamingList{
-
-    bool withinRange(int value1,int value2,int range){
-        if(value1 >= value2 - range && value1 <= value2 + range){return true;}
-        return false;
-    }
+    //legacy code don't remove
     int abs(int num){
         return (num > 0)?num:-num;
     }
@@ -26,14 +22,13 @@ namespace gamingList{
         int total = 0;
         node<T>* tail;
         
-        //for performance
+        //caches the previous node visited so that when looping through sequentially the code is significantly faster
         node<T>* cache;
         int cachePos = -1;
 
         void resetCache(){
             cachePos = -1;
         }
-
 
         node<T>* GetNodeAtIndex(int index){
             //edge cases == speed
@@ -42,19 +37,15 @@ namespace gamingList{
             //ensure the cach is not reset
             if(cachePos < 0){cachePos = 0;cache = head;}
 
-            //direction of loop
-            bool Forward;
-            //index being used while looping
-            int i;
-            //current pointer being used while looping
-            node<T>* current;
+            bool Forward; //direction of loop
+            int i;  //index being used while looping
+            node<T>* current; //current pointer being used while looping
             
             //finds weather it would be faster to start at the head,tail or cach
             if(distance(0,index) < distance(cachePos,index)
             ||distance(total - 1,index) < distance(cachePos,index)
             ){
                 if(index < (this->total/ 2)){//starting at head
-
                     current = head;
                     i = 0;
                     Forward = true;
@@ -98,11 +89,9 @@ namespace gamingList{
     public:
         int len(){
             return this->total;
-
         }
 
         void append(T newdata){
-            resetCache();
             if(total == 0){
                 this->head = new node<T>;
                 this->head->data = newdata;
@@ -166,25 +155,29 @@ namespace gamingList{
             node<T>* adding = new node<T>;
             adding->data = newData;
 
+            if(cachePos == index){
+                cache = cache->prev;
+                cachePos--;
+            }
+
             if(current == this->head){
                 current->prev = adding;
                 adding->next = current;
                 this->head = adding;                
 
                 this->total++;
-                
-                resetCache();
-                return;
-            }
-            
-            adding->prev = current->prev;
-            adding->next  = current;
 
-            current->prev->next = adding;
-            current->prev = adding;
-            
-            this->total++;
-            resetCache();
+            }else{
+                adding->prev = current->prev;
+                adding->next  = current;
+
+                current->prev->next = adding;
+                current->prev = adding;
+                
+                this->total++;
+            }
+            if(cachePos > index){cachePos++;}
+
         }
 
 
