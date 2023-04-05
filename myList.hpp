@@ -146,14 +146,9 @@ namespace gamingList{
                 return true;
             }
 
-            node<int>* previous = GetNodeAtIndex(index - 1); 
-            node<int>* after = GetNodeAtIndex(index + 1); 
-
-            previous->next = after;
-            after->prev = previous;
+            current->prev->next = current->next;
+            current->next->prev = current->prev;
             
-
-
             resetCach();
             this->total--;
             delete(current);
