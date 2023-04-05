@@ -27,12 +27,11 @@ namespace gamingList{
         node<T>* tail;
         
         //for performance
-        node<T>* cach;
-        int cachPos = -1;
+        node<T>* cache;
+        int cachePos = -1;
 
-        void resetCach(){
-            cachPos = -1;
-
+        void resetCache(){
+            cachePos = -1;
         }
 
 
@@ -41,7 +40,7 @@ namespace gamingList{
             if(index == 0){return this->head;}  
             if(index == this->total - 1){return this->tail;}    
             //ensure the cach is not reset
-            if(cachPos < 0){cachPos = 0;cach = head;}
+            if(cachePos < 0){cachePos = 0;cache = head;}
 
             //direction of loop
             bool Forward;
@@ -51,8 +50,8 @@ namespace gamingList{
             node<T>* current;
             
             //finds weather it would be faster to start at the head,tail or cach
-            if(distance(0,index) < distance(cachPos,index)
-            ||distance(total - 1,index) < distance(cachPos,index)
+            if(distance(0,index) < distance(cachePos,index)
+            ||distance(total - 1,index) < distance(cachePos,index)
             ){
                 if(index < (this->total/ 2)){//starting at head
 
@@ -69,9 +68,9 @@ namespace gamingList{
                 }
             } 
             else{//starting at cach
-                current = cach;
-                i = cachPos;
-                Forward = (index - cachPos > 0);
+                current = cache;
+                i = cachePos;
+                Forward = (index - cachePos > 0);
             }
 
 
@@ -88,8 +87,8 @@ namespace gamingList{
                 }
             }while(current!=tail && current != head);//if its looking for an item outsied of range it will return the closest
 
-            cachPos = index;    //edit the cach
-            cach = current;
+            cachePos = index;    //edit the cach
+            cache = current;
             return current;
 
         }
@@ -103,7 +102,7 @@ namespace gamingList{
         }
 
         void append(T newdata){
-            resetCach();
+            resetCache();
             if(total == 0){
                 this->head = new node<T>;
                 this->head->data = newdata;
@@ -131,27 +130,29 @@ namespace gamingList{
         bool remove(int index){
             if(index < 0 || index >= this->total){return false;}
             node<T>* current = GetNodeAtIndex(index); 
-            
-
+            if(cachePos == index){
+                cache = cache->prev;
+                cachePos--;
+            }
             if(current == head){
                 this->head = current->next;
                 delete(current);
-                total--;
-                return true;
             }
-            if(current == tail){
+            else if(current == tail){
                 this->tail = current->prev;
                 delete(current);
-                total--;
-                return true;
+            }
+            else{
+                current->prev->next = current->next;
+                current->next->prev = current->prev;
+                delete(current);
             }
 
-            current->prev->next = current->next;
-            current->next->prev = current->prev;
-            
-            resetCach();
+            if(cachePos > index){
+                cachePos--;
+            }
+
             this->total--;
-            delete(current);
             return true;
         }
 
@@ -187,7 +188,7 @@ namespace gamingList{
 
                 this->total++;
                 
-                resetCach();
+                resetCache();
                 return;
             }
             
@@ -198,7 +199,7 @@ namespace gamingList{
             current->prev = adding;
             
             this->total++;
-            resetCach();
+            resetCache();
         }
 
 
