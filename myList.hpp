@@ -51,7 +51,6 @@ namespace gamingList{
             node<T>* current;
             
             //finds weather it would be faster to start at the head,tail or cach
-            
             if(distance(0,index) < distance(cachPos,index)
             ||distance(total - 1,index) < distance(cachPos,index)
             ){
