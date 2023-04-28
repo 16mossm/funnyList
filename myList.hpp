@@ -181,6 +181,42 @@ namespace gamingList{
         }
 
 
+
+
+		void sort(bool backward = false) {
+			for (int i = 1; i < this->total; i++) {
+				T originalData = this->get(i);
+				for (int j = i - 1; j >= 0; j--) {
+					T Jdata = this->get(j);
+					if (!backward) {
+						if (originalData > Jdata) {
+							//swapToHere;
+							this->remove(i);
+							this->insert(originalData, j + 1);
+							j = -1; //stop the looping
+						}
+						else if (j == 0) {
+							this->remove(i);
+							this->prepend(originalData);
+						}
+					}
+					else {
+						if (originalData < Jdata) {
+							//swapToHere;
+							this->remove(i);
+							this->insert(originalData, j + 1);
+							j = -1; //stop the looping
+						}
+						else if (j == 0) {
+							this->remove(i);
+							this->prepend(originalData);
+						}
+					}
+				}
+
+			}
+
+		}
         void pop_front(){
             this->remove(0);
         }
